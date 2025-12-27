@@ -97,54 +97,27 @@ class MiniMaxSearch:
 def create_coffee_utility_function():
     """
     Create a utility function based on coffee quality at different locations
-    Higher values = better coffee quality
+    Uses the provided utility values for terminal states
     """
-    # Coffee quality scores for different cities (0-100 scale)
-    # Adjust these based on actual Figure 4 or known coffee regions
-    coffee_quality = {
-        "Addis Ababa": 60,
-        "Jimma": 95,  # Jimma is known for coffee
-        "Bedele": 90,
-        "Gore": 85,
-        "Shashemene": 70,
-        "Hawassa": 75,
-        "Wolkite": 65,
-        "Buta Jirra": 55,
-        "Ambo": 50,
-        "Nekemte": 60,
-        "Gimbi": 70,
-        "Worabe": 65,
-        "Hossana": 60,
-        "Dodola": 55,
-        "Dilla": 50,
-        "Wolaita Sodo": 65,
-        "Arba Minch": 60,
-        "Bale": 50,
-        "Goba": 45,
-        "Sof Oumer": 40,
-        "Moyale": 30,
-        "Tepi": 80,
-        "Mizan": 75,
-        "Konso": 60,
-        "Yabello": 50,
-        "Mega": 45,
-        "Gode": 35,
-        "Kebri Dehar": 30,
-        "Warder": 25,
-        "Basketo": 70,
-        "Jinka": 65,
-        "Key Afer": 60,
-        "Turmi": 55,
-        "Omorate": 50,
-        "Kangatan": 45,
-        "Dimeka": 50,
-        "Hargelle": 30,
-        "Boh": 25,
-        "Elidar": 20,
-        "Asseb": 15,
-        "Dessie": 40,
-        "Dollo": 35,
+    # Utility values for terminal states (cities) as provided
+    utility_values = {
+        "Shambu": 4,
+        "Fincha": 5,
+        "Gimbi": 8,
+        "Limu": 8,
+        "Hossana": 6,
+        "Durame": 5,
+        "Bench Naji": 5,
+        "Bench Maji": 5,  # Alternative spelling
+        "Tepi": 6,
+        "Kaffa": 7,
+        "Dilla": 9,
+        "Chiro": 6,
+        "Harar": 10,
     }
+    
+    # Default utility for non-terminal states (can be adjusted)
+    default_utility = 0
     
     def utility(node, is_maximizing_player):
         """
@@ -157,14 +130,15 @@ def create_coffee_utility_function():
         Returns:
             int: Utility value
         """
-        base_quality = coffee_quality.get(node, 50)  # Default quality
+        # Get utility value for terminal state, or use default
+        base_utility = utility_values.get(node, default_utility)
         
         if is_maximizing_player:
-            # Agent wants high coffee quality
-            return base_quality
+            # Agent wants high utility (coffee quality)
+            return base_utility
         else:
-            # Adversary wants to minimize agent's coffee quality
-            return -base_quality
+            # Adversary wants to minimize agent's utility
+            return -base_utility
     
     return utility
 
@@ -212,8 +186,19 @@ if __name__ == "__main__":
     print(f"\nExpected utility value: {best_value}")
     print(f"Final destination: {best_path[-1]}")
     
-    # Show coffee quality at final destination
+    # Show utility value at final destination
     utility_func_instance = create_coffee_utility_function()
-    final_quality = utility_func_instance(best_path[-1], True)
-    print(f"Coffee quality at final destination: {final_quality}/100")
+    final_utility = utility_func_instance(best_path[-1], True)
+    print(f"Utility value at final destination: {final_utility}")
+    
+    # Show all terminal states with their utility values
+    print("\nTerminal States and Utility Values:")
+    print("-" * 40)
+    terminal_states = {
+        "Shambu": 4, "Fincha": 5, "Gimbi": 8, "Limu": 8,
+        "Hossana": 6, "Durame": 5, "Bench Naji": 5, "Tepi": 6,
+        "Kaffa": 7, "Dilla": 9, "Chiro": 6, "Harar": 10
+    }
+    for state, utility in sorted(terminal_states.items(), key=lambda x: x[1], reverse=True):
+        print(f"  {state}: {utility}")
 
