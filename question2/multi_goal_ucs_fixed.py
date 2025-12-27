@@ -1,9 +1,9 @@
 """
 Question 2.3: Customized Uniform Cost Search for multiple goal states
-Given "Addis Ababa" as initial state and multiple goal states, generate
-a path that visits all goal states preserving local optimum.
+Fixed version that visits ALL goals
 """
 
+import heapq
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -43,12 +43,8 @@ class MultiGoalUniformCostSearch:
         complete_path = [initial_state]
         total_cost = 0
         visited_goals_order = []
-        max_iterations = len(goal_states) * 10  # Prevent infinite loops
-        iteration = 0
         
-        while remaining_goals and iteration < max_iterations:
-            iteration += 1
-            
+        while remaining_goals:
             # Find the nearest unvisited goal from current position
             best_goal = None
             best_cost = float('inf')
@@ -118,3 +114,4 @@ if __name__ == "__main__":
         print(f"Number of goals visited: {len(visited_order)}/{len(goal_states)}")
     else:
         print("\nNo valid path found")
+

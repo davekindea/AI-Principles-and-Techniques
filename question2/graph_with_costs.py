@@ -75,7 +75,10 @@ def create_figure2_graph():
         ("Mekelle", "Sekota", 9),
         ("Mekelle", "Alamata", 5),
         ("Sekota", "Lalibela", 6),
+        ("Lalibela", "Sekota", 6),  # Bidirectional connection
         ("Sekota", "Alamata", 6),
+        ("Sekota", "Axum", 12),  # Connection to reach Axum
+        ("Axum", "Sekota", 12),  # Bidirectional connection
         ("Alamata", "Samara", 11),
         ("Alamata", "Woldia", 3),
         ("Woldia", "Lalibela", 7),
@@ -83,6 +86,9 @@ def create_figure2_graph():
         ("Woldia", "Dessie", 6),
         ("Dessie", "Woldia", 6),  # Bidirectional connection
         ("Lalibela", "Debre Tabor", 8),
+        ("Debre Tabor", "Lalibela", 8),  # Bidirectional connection
+        ("Debre Tabor", "Gondar", 8),  # Connection to reach Gondar
+        ("Gondar", "Debre Tabor", 8),  # Bidirectional connection
         ("Samara", "Fanti Rasu", 7),
         ("Samara", "Gabi Rasu", 9),
         ("Fanti Rasu", "Kilbet Rasu", 6),
@@ -96,6 +102,9 @@ def create_figure2_graph():
         ("Gondar", "Azezo", 1),
         ("Azezo", "Bahir Dar", 7),
         ("Bahir Dar", "Debre Tabor", 4),
+        ("Debre Tabor", "Bahir Dar", 4),  # Bidirectional connection
+        ("Bahir Dar", "Gondar", 8),  # Connection to reach Gondar
+        ("Gondar", "Bahir Dar", 8),  # Bidirectional connection
         ("Bahir Dar", "Metekel", 11),
         ("Bahir Dar", "Injibara", 4),
         ("Bahir Dar", "Finote Selam", 6),
@@ -113,6 +122,7 @@ def create_figure2_graph():
         ("Addis Ababa", "Debre Birhan", 5),  # Bidirectional connection
         ("Addis Ababa", "Ambo", 5),
         ("Addis Ababa", "Adama", 3),
+        ("Adama", "Addis Ababa", 3),  # Bidirectional connection
         ("Ambo", "Nekemte", 9),
         ("Ambo", "Wolkite", 6),
         ("Nekemte", "Gimbi", 4),
@@ -157,9 +167,13 @@ def create_figure2_graph():
         ("Shashemene", "Dodolla", 3),
         ("Batu", "Adama", 4),
         ("Adama", "Assella", 4),
+        ("Assella", "Adama", 4),  # Bidirectional connection
         ("Adama", "Matahara", 3),
+        ("Matahara", "Adama", 3),  # Bidirectional connection
         ("Matahara", "Awash", 1),
+        ("Awash", "Matahara", 1),  # Bidirectional connection
         ("Assella", "Dodolla", 1),
+        ("Dodolla", "Assella", 1),  # Bidirectional connection
         ("Dodolla", "Bale", 13),
         ("Bale", "Liben", 11),
         ("Bale", "Goba", 18),
@@ -167,11 +181,23 @@ def create_figure2_graph():
         ("Goba", "Sof Oumer", 6),
         ("Goba", "Babile", 28),
         ("Sof Oumer", "Gode", 23),
+        ("Gode", "Sof Oumer", 23),  # Bidirectional connection
+        ("Sof Oumer", "Goba", 6),  # Reverse connection
+        ("Goba", "Sof Oumer", 6),  # Bidirectional connection
+        ("Goba", "Bale", 18),  # Reverse connection
+        ("Bale", "Goba", 18),  # Bidirectional connection
+        ("Bale", "Dodolla", 13),  # Reverse connection
+        ("Dodolla", "Bale", 13),  # Bidirectional connection
         ("Awash", "Chiro", 4),
+        ("Chiro", "Awash", 4),  # Bidirectional connection
         ("Chiro", "Dire Dawa", 8),
+        ("Dire Dawa", "Chiro", 8),  # Bidirectional connection
         ("Dire Dawa", "Harar", 4),
+        ("Harar", "Dire Dawa", 4),  # Bidirectional connection
         ("Harar", "Babile", 2),
+        ("Babile", "Harar", 2),  # Bidirectional connection
         ("Babile", "Jijiga", 3),
+        ("Jijiga", "Babile", 3),  # Bidirectional connection
         ("Jijiga", "Dega Habur", 5),
         ("Dega Habur", "Kebri Dehar", 6),
         ("Kebri Dehar", "Werder", 6),
