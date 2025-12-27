@@ -11,7 +11,7 @@ class GraphWithCosts:
     
     def add_edge(self, from_node, to_node, cost):
         """
-        Add a directed edge with cost
+        Add a directed edge with cost (avoids duplicates)
         
         Args:
             from_node: Starting node
@@ -21,22 +21,28 @@ class GraphWithCosts:
         if from_node not in self.graph:
             self.graph[from_node] = []
         
-        self.graph[from_node].append((to_node, cost))
+        # Check if edge already exists to avoid duplicates
+        if not any(neighbor == to_node for neighbor, _ in self.graph[from_node]):
+            self.graph[from_node].append((to_node, cost))
     
     def add_bidirectional_edge(self, from_node, to_node, cost):
         """Add bidirectional edge with same cost both ways"""
         self.add_edge(from_node, to_node, cost)
         self.add_edge(to_node, from_node, cost)
     
-    def build_from_edges(self, edges):
+    def build_from_edges(self, edges, bidirectional=True):
         """
         Build graph from a list of edges with costs
         
         Args:
             edges: List of tuples (from_node, to_node, cost)
+            bidirectional: If True, make all edges bidirectional (default: True)
         """
         for from_node, to_node, cost in edges:
-            self.add_edge(from_node, to_node, cost)
+            if bidirectional:
+                self.add_bidirectional_edge(from_node, to_node, cost)
+            else:
+                self.add_edge(from_node, to_node, cost)
     
     def get_graph(self):
         """Return the graph as a dictionary"""
@@ -60,7 +66,7 @@ def create_figure2_graph():
     # Format: (from, to, cost)
     # Data extracted directly from the image
     edges = [
-        # Northern region and external connections
+        # Northern Region and External Connections
         ("Kartum", "Humera", 21),
         ("Kartum", "Metema", 19),
         ("Asmera", "Axum", 5),
@@ -69,42 +75,33 @@ def create_figure2_graph():
         ("Shire", "Axum", 2),
         ("Shire", "Debarke", 5),
         ("Axum", "Adwa", 1),
+        ("Axum", "Sekota", 12),
         ("Adwa", "Adigrat", 4),
         ("Adwa", "Mekelle", 7),
         ("Adigrat", "Mekelle", 4),
         ("Mekelle", "Sekota", 9),
         ("Mekelle", "Alamata", 5),
         ("Sekota", "Lalibela", 6),
-        ("Lalibela", "Sekota", 6),  # Bidirectional connection
         ("Sekota", "Alamata", 6),
-        ("Sekota", "Axum", 12),  # Connection to reach Axum
-        ("Axum", "Sekota", 12),  # Bidirectional connection
         ("Alamata", "Samara", 11),
         ("Alamata", "Woldia", 3),
         ("Woldia", "Lalibela", 7),
         ("Woldia", "Samara", 8),
         ("Woldia", "Dessie", 6),
-        ("Dessie", "Woldia", 6),  # Bidirectional connection
         ("Lalibela", "Debre Tabor", 8),
-        ("Debre Tabor", "Lalibela", 8),  # Bidirectional connection
-        ("Debre Tabor", "Gondar", 8),  # Connection to reach Gondar
-        ("Gondar", "Debre Tabor", 8),  # Bidirectional connection
+        ("Debre Tabor", "Gondar", 8),
+        ("Debre Tabor", "Bahir Dar", 4),
         ("Samara", "Fanti Rasu", 7),
         ("Samara", "Gabi Rasu", 9),
         ("Fanti Rasu", "Kilbet Rasu", 6),
         ("Gabi Rasu", "Awash", 5),
-        ("Awash", "Gabi Rasu", 5),  # Bidirectional connection
-        
-        # Central and Western region
+
+        # Central and Western Region
         ("Debarke", "Gondar", 4),
         ("Metema", "Gondar", 7),
         ("Metema", "Azezo", 7),
         ("Gondar", "Azezo", 1),
         ("Azezo", "Bahir Dar", 7),
-        ("Bahir Dar", "Debre Tabor", 4),
-        ("Debre Tabor", "Bahir Dar", 4),  # Bidirectional connection
-        ("Bahir Dar", "Gondar", 8),  # Connection to reach Gondar
-        ("Gondar", "Bahir Dar", 8),  # Bidirectional connection
         ("Bahir Dar", "Metekel", 11),
         ("Bahir Dar", "Injibara", 4),
         ("Bahir Dar", "Finote Selam", 6),
@@ -113,16 +110,11 @@ def create_figure2_graph():
         ("Finote Selam", "Debre Markos", 3),
         ("Debre Markos", "Debre Sina", 17),
         ("Dessie", "Kemise", 4),
-        ("Kemise", "Dessie", 4),  # Bidirectional connection
         ("Kemise", "Debre Sina", 6),
-        ("Debre Sina", "Kemise", 6),  # Bidirectional connection
         ("Debre Sina", "Debre Birhan", 2),
-        ("Debre Birhan", "Debre Sina", 2),  # Bidirectional connection
         ("Debre Birhan", "Addis Ababa", 5),
-        ("Addis Ababa", "Debre Birhan", 5),  # Bidirectional connection
         ("Addis Ababa", "Ambo", 5),
         ("Addis Ababa", "Adama", 3),
-        ("Adama", "Addis Ababa", 3),  # Bidirectional connection
         ("Ambo", "Nekemte", 9),
         ("Ambo", "Wolkite", 6),
         ("Nekemte", "Gimbi", 4),
@@ -150,8 +142,8 @@ def create_figure2_graph():
         ("Wolaita Sodo", "Dawro", 6),
         ("Wolaita Sodo", "Arba Minch", 4),
         ("Wolaita Sodo", "Shashemene", 7),
-        
-        # Southern and Eastern region
+
+        # Southern and Eastern Region
         ("Arba Minch", "Konso", 4),
         ("Arba Minch", "Basketo", 10),
         ("Basketo", "Bench Maji", 5),
@@ -167,13 +159,9 @@ def create_figure2_graph():
         ("Shashemene", "Dodolla", 3),
         ("Batu", "Adama", 4),
         ("Adama", "Assella", 4),
-        ("Assella", "Adama", 4),  # Bidirectional connection
         ("Adama", "Matahara", 3),
-        ("Matahara", "Adama", 3),  # Bidirectional connection
         ("Matahara", "Awash", 1),
-        ("Awash", "Matahara", 1),  # Bidirectional connection
         ("Assella", "Dodolla", 1),
-        ("Dodolla", "Assella", 1),  # Bidirectional connection
         ("Dodolla", "Bale", 13),
         ("Bale", "Liben", 11),
         ("Bale", "Goba", 18),
@@ -181,32 +169,21 @@ def create_figure2_graph():
         ("Goba", "Sof Oumer", 6),
         ("Goba", "Babile", 28),
         ("Sof Oumer", "Gode", 23),
-        ("Gode", "Sof Oumer", 23),  # Bidirectional connection
-        ("Sof Oumer", "Goba", 6),  # Reverse connection
-        ("Goba", "Sof Oumer", 6),  # Bidirectional connection
-        ("Goba", "Bale", 18),  # Reverse connection
-        ("Bale", "Goba", 18),  # Bidirectional connection
-        ("Bale", "Dodolla", 13),  # Reverse connection
-        ("Dodolla", "Bale", 13),  # Bidirectional connection
         ("Awash", "Chiro", 4),
-        ("Chiro", "Awash", 4),  # Bidirectional connection
         ("Chiro", "Dire Dawa", 8),
-        ("Dire Dawa", "Chiro", 8),  # Bidirectional connection
         ("Dire Dawa", "Harar", 4),
-        ("Harar", "Dire Dawa", 4),  # Bidirectional connection
         ("Harar", "Babile", 2),
-        ("Babile", "Harar", 2),  # Bidirectional connection
         ("Babile", "Jijiga", 3),
-        ("Jijiga", "Babile", 3),  # Bidirectional connection
         ("Jijiga", "Dega Habur", 5),
         ("Dega Habur", "Kebri Dehar", 6),
         ("Kebri Dehar", "Werder", 6),
         ("Kebri Dehar", "Gode", 5),
         ("Gode", "Dollo", 17),
-        ("Gode", "Mokadisho", 22),
+        ("Gode", "Mokadisho", 22)
     ]
     
-    graph.build_from_edges(edges)
+    # Build graph with all edges bidirectional
+    graph.build_from_edges(edges, bidirectional=True)
     return graph
 
 

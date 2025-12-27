@@ -19,11 +19,14 @@ def test_question3():
     # Create graph
     graph = create_figure2_graph()
     
-    # Create heuristic function
-    heuristic_func = create_heuristic_function()
+    # Option 1: Use dynamic heuristic (works for ANY goal/destination)
+    # This calculates heuristics based on actual path costs dynamically
+    print("Using dynamic heuristic (works for any destination)...")
+    astar = AStarSearch(graph, heuristic_func=None)
     
-    # Initialize A* Search
-    astar = AStarSearch(graph, heuristic_func)
+    # Option 2: Use fixed heuristic from Figure 3 (only for specific goals like Moyale)
+    # heuristic_func = create_heuristic_function()
+    # astar = AStarSearch(graph, heuristic_func)
     
     print("\n3. Testing A* Search (Addis Ababa -> Moyale):")
     initial = "Addis Ababa"

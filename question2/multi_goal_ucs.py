@@ -102,7 +102,7 @@ if __name__ == "__main__":
     
     initial = "Addis Ababa"
     goal_states = ["Axum", "Gondar", "Lalibela", "Babile", "Jimma", 
-                   "Bale", "Sof Oumer", "Arba Minch"]
+                   "Bale", "Sof Oumer", "Bahir Dar"]
     
     print(f"\nInitial state: {initial}")
     print(f"Goal states: {', '.join(goal_states)}")
