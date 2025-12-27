@@ -1,0 +1,611 @@
+{
+  "total_nodes": 81,
+  "nodes": [
+    "Adama",
+    "Addis Ababa",
+    "Adigrat",
+    "Adwa",
+    "Alamat",
+    "Ambo",
+    "Arba Minch",
+    "Asmera",
+    "Assella",
+    "Assosa",
+    "Awash",
+    "Axum",
+    "Azezo",
+    "Babile",
+    "Bahir Dar",
+    "Bale",
+    "Basket",
+    "Batu",
+    "Bedelle",
+    "Bench Maji",
+    "Bonga",
+    "Bule Hora",
+    "Buta Jirra",
+    "Chiro",
+    "Dawro",
+    "Debarke",
+    "Debre Birhan",
+    "Debre Markos",
+    "Debre Sina",
+    "Debre Tabor",
+    "Dega Habur",
+    "Dembi Dollo",
+    "Dessie",
+    "Dilla",
+    "Dire Dawa",
+    "Dodolla",
+    "Dollo",
+    "Fanti Rasu",
+    "Finote Selam",
+    "Gabi Rasu",
+    "Gambella",
+    "Gimbi",
+    "Goba",
+    "Gode",
+    "Gondar",
+    "Gore",
+    "Harar",
+    "Hawassa",
+    "Hossana",
+    "Humera",
+    "Injibara",
+    "Jijiga",
+    "Jimma",
+    "Juba",
+    "Kartum",
+    "Kebri Dehar",
+    "Kemise",
+    "Kilbet Rasu",
+    "Konso",
+    "Lalibela",
+    "Liben",
+    "Matahara",
+    "Mekelle",
+    "Metekel",
+    "Metema",
+    "Mezan Teferi",
+    "Mokadisho",
+    "Moyale",
+    "Nairobi",
+    "Nekemete",
+    "Samara",
+    "Sekota",
+    "Shashemene",
+    "Shire",
+    "Sof Oumer",
+    "Tepi",
+    "Werder",
+    "Wolaita Sodo",
+    "Woldia",
+    "Worabe",
+    "Yabello"
+  ],
+  "total_edges": 99,
+  "edges": [
+    [
+      "Kartum",
+      "Humera",
+      19
+    ],
+    [
+      "Kartum",
+      "Metema",
+      21
+    ],
+    [
+      "Adigrat",
+      "Asmera",
+      5
+    ],
+    [
+      "Gode",
+      "Mokadisho",
+      22
+    ],
+    [
+      "Bench Maji",
+      "Juba",
+      22
+    ],
+    [
+      "Moyale",
+      "Nairobi",
+      22
+    ],
+    [
+      "Humera",
+      "Shire",
+      8
+    ],
+    [
+      "Humera",
+      "Metema",
+      7
+    ],
+    [
+      "Shire",
+      "Adwa",
+      2
+    ],
+    [
+      "Shire",
+      "Debarke",
+      9
+    ],
+    [
+      "Adwa",
+      "Axum",
+      4
+    ],
+    [
+      "Axum",
+      "Adigrat",
+      4
+    ],
+    [
+      "Adigrat",
+      "Mekelle",
+      7
+    ],
+    [
+      "Metema",
+      "Gondar",
+      7
+    ],
+    [
+      "Gondar",
+      "Azezo",
+      4
+    ],
+    [
+      "Gondar",
+      "Debarke",
+      6
+    ],
+    [
+      "Azezo",
+      "Bahir Dar",
+      7
+    ],
+    [
+      "Azezo",
+      "Metekel",
+      11
+    ],
+    [
+      "Metekel",
+      "Bahir Dar",
+      11
+    ],
+    [
+      "Bahir Dar",
+      "Injibara",
+      6
+    ],
+    [
+      "Bahir Dar",
+      "Debre Tabor",
+      8
+    ],
+    [
+      "Injibara",
+      "Finote Selam",
+      2
+    ],
+    [
+      "Finote Selam",
+      "Debre Markos",
+      3
+    ],
+    [
+      "Debre Markos",
+      "Dessie",
+      17
+    ],
+    [
+      "Dessie",
+      "Kemise",
+      4
+    ],
+    [
+      "Dessie",
+      "Lalibela",
+      9
+    ],
+    [
+      "Dessie",
+      "Woldia",
+      6
+    ],
+    [
+      "Kemise",
+      "Debre Sina",
+      6
+    ],
+    [
+      "Debre Sina",
+      "Addis Ababa",
+      2
+    ],
+    [
+      "Addis Ababa",
+      "Ambo",
+      5
+    ],
+    [
+      "Addis Ababa",
+      "Debre Birhan",
+      5
+    ],
+    [
+      "Addis Ababa",
+      "Buta Jirra",
+      6
+    ],
+    [
+      "Addis Ababa",
+      "Jimma",
+      8
+    ],
+    [
+      "Ambo",
+      "Nekemete",
+      9
+    ],
+    [
+      "Nekemete",
+      "Gimbi",
+      4
+    ],
+    [
+      "Gimbi",
+      "Dembi Dollo",
+      6
+    ],
+    [
+      "Dembi Dollo",
+      "Assosa",
+      12
+    ],
+    [
+      "Dembi Dollo",
+      "Gambella",
+      4
+    ],
+    [
+      "Gambella",
+      "Gore",
+      5
+    ],
+    [
+      "Gore",
+      "Bedelle",
+      6
+    ],
+    [
+      "Gore",
+      "Tepi",
+      9
+    ],
+    [
+      "Tepi",
+      "Mezan Teferi",
+      4
+    ],
+    [
+      "Tepi",
+      "Bonga",
+      8
+    ],
+    [
+      "Mezan Teferi",
+      "Bonga",
+      4
+    ],
+    [
+      "Bonga",
+      "Dawro",
+      10
+    ],
+    [
+      "Jimma",
+      "Bedelle",
+      7
+    ],
+    [
+      "Jimma",
+      "Bonga",
+      4
+    ],
+    [
+      "Jimma",
+      "Hossana",
+      7
+    ],
+    [
+      "Hossana",
+      "Worabe",
+      2
+    ],
+    [
+      "Hossana",
+      "Wolaita Sodo",
+      4
+    ],
+    [
+      "Hossana",
+      "Shashemene",
+      7
+    ],
+    [
+      "Worabe",
+      "Buta Jirra",
+      5
+    ],
+    [
+      "Buta Jirra",
+      "Batu",
+      2
+    ],
+    [
+      "Batu",
+      "Assella",
+      4
+    ],
+    [
+      "Assella",
+      "Adama",
+      4
+    ],
+    [
+      "Adama",
+      "Matahara",
+      3
+    ],
+    [
+      "Debre Birhan",
+      "Matahara",
+      1
+    ],
+    [
+      "Matahara",
+      "Awash",
+      3
+    ],
+    [
+      "Matahara",
+      "Chiro",
+      4
+    ],
+    [
+      "Awash",
+      "Chiro",
+      1
+    ],
+    [
+      "Awash",
+      "Dire Dawa",
+      8
+    ],
+    [
+      "Awash",
+      "Gabi Rasu",
+      5
+    ],
+    [
+      "Dire Dawa",
+      "Harar",
+      4
+    ],
+    [
+      "Harar",
+      "Babile",
+      2
+    ],
+    [
+      "Babile",
+      "Jijiga",
+      3
+    ],
+    [
+      "Jijiga",
+      "Dega Habur",
+      5
+    ],
+    [
+      "Dega Habur",
+      "Kebri Dehar",
+      6
+    ],
+    [
+      "Kebri Dehar",
+      "Werder",
+      6
+    ],
+    [
+      "Kebri Dehar",
+      "Gode",
+      5
+    ],
+    [
+      "Gode",
+      "Dollo",
+      17
+    ],
+    [
+      "Gode",
+      "Sof Oumer",
+      23
+    ],
+    [
+      "Sof Oumer",
+      "Goba",
+      6
+    ],
+    [
+      "Goba",
+      "Bale",
+      18
+    ],
+    [
+      "Goba",
+      "Dodolla",
+      23
+    ],
+    [
+      "Bale",
+      "Liben",
+      11
+    ],
+    [
+      "Bale",
+      "Dodolla",
+      13
+    ],
+    [
+      "Dodolla",
+      "Shashemene",
+      3
+    ],
+    [
+      "Shashemene",
+      "Hawassa",
+      3
+    ],
+    [
+      "Hawassa",
+      "Dilla",
+      3
+    ],
+    [
+      "Dilla",
+      "Bule Hora",
+      4
+    ],
+    [
+      "Bule Hora",
+      "Konso",
+      3
+    ],
+    [
+      "Konso",
+      "Yabello",
+      3
+    ],
+    [
+      "Konso",
+      "Arba Minch",
+      14
+    ],
+    [
+      "Arba Minch",
+      "Wolaita Sodo",
+      4
+    ],
+    [
+      "Yabello",
+      "Moyale",
+      6
+    ],
+    [
+      "Dawro",
+      "Basket",
+      10
+    ],
+    [
+      "Basket",
+      "Bench Maji",
+      5
+    ],
+    [
+      "Gabi Rasu",
+      "Samara",
+      9
+    ],
+    [
+      "Samara",
+      "Fanti Rasu",
+      7
+    ],
+    [
+      "Samara",
+      "Alamat",
+      11
+    ],
+    [
+      "Fanti Rasu",
+      "Kilbet Rasu",
+      6
+    ],
+    [
+      "Kilbet Rasu",
+      "Mekelle",
+      6
+    ],
+    [
+      "Mekelle",
+      "Debarke",
+      6
+    ],
+    [
+      "Mekelle",
+      "Sekota",
+      9
+    ],
+    [
+      "Sekota",
+      "Alamat",
+      6
+    ],
+    [
+      "Sekota",
+      "Debre Tabor",
+      8
+    ],
+    [
+      "Alamat",
+      "Woldia",
+      7
+    ],
+    [
+      "Woldia",
+      "Lalibela",
+      8
+    ],
+    [
+      "Lalibela",
+      "Debre Tabor",
+      8
+    ]
+  ],
+  "dotted_edges": [
+    [
+      "Kartum",
+      "Metema",
+      21
+    ],
+    [
+      "Adigrat",
+      "Asmera",
+      5
+    ],
+    [
+      "Gode",
+      "Mokadisho",
+      22
+    ],
+    [
+      "Bench Maji",
+      "Juba",
+      22
+    ],
+    [
+      "Moyale",
+      "Nairobi",
+      22
+    ]
+  ]
+}
