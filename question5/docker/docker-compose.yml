@@ -1,0 +1,25 @@
+# Run Gazebo + ROS Noetic for Question 5
+# Usage: docker-compose run --rm rosnoetic bash
+# Then inside: /catkin_ws/build_and_launch.sh
+
+version: "3"
+services:
+  rosnoetic:
+    build: .
+    image: traveling_ethiopia_robot:noetic
+    container_name: traveling_ethiopia_ros
+    stdin_open: true
+    tty: true
+    network_mode: host
+    environment:
+      - DISPLAY=${DISPLAY:-:0}
+      - ROS_MASTER_URI=http://localhost:11311
+    volumes:
+      # Mount project so we can build inside container
+      - ..:/project:ro
+      # Persist built workspace (optional: faster rebuilds)
+      - ros_ws:/catkin_ws
+    working_dir: /catkin_ws
+
+volumes:
+  ros_ws: {}

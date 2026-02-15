@@ -2,8 +2,24 @@
 Test cases for Question 1
 """
 
-from graph_converter import create_figure1_graph
-from search_algorithm import SearchAlgorithm
+import sys
+import os
+
+# Allow running from root or local directory
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+
+try:
+    from question1.graph_converter import create_figure1_graph
+    from question1.search_algorithm import SearchAlgorithm
+except ImportError:
+    # Fallback for local execution if not run as module
+    from graph_converter import create_figure1_graph
+    from search_algorithm import SearchAlgorithm
 
 
 def test_question1():

@@ -25,6 +25,7 @@
   <!-- Front Left Wheel -->
   <link name="front_left_wheel">
     <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 0"/>
       <geometry>
         <cylinder radius="0.1" length="0.05"/>
       </geometry>
@@ -33,6 +34,7 @@
       </material>
     </visual>
     <collision>
+      <origin xyz="0 0 0" rpy="1.57 0 0"/>
       <geometry>
         <cylinder radius="0.1" length="0.05"/>
       </geometry>
@@ -46,6 +48,7 @@
   <!-- Front Right Wheel -->
   <link name="front_right_wheel">
     <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 0"/>
       <geometry>
         <cylinder radius="0.1" length="0.05"/>
       </geometry>
@@ -54,6 +57,7 @@
       </material>
     </visual>
     <collision>
+      <origin xyz="0 0 0" rpy="1.57 0 0"/>
       <geometry>
         <cylinder radius="0.1" length="0.05"/>
       </geometry>
@@ -68,7 +72,7 @@
   <link name="rear_wheel">
     <visual>
       <geometry>
-        <cylinder radius="0.1" length="0.05"/>
+        <sphere radius="0.1"/>
       </geometry>
       <material name="black">
         <color rgba="0 0 0 1"/>
@@ -76,12 +80,28 @@
     </visual>
     <collision>
       <geometry>
-        <cylinder radius="0.1" length="0.05"/>
+        <sphere radius="0.1"/>
       </geometry>
     </collision>
     <inertial>
       <mass value="0.5"/>
       <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+    </inertial>
+  </link>
+
+  <!-- Laser/Proximity sensor link -->
+  <link name="laser_link">
+    <visual>
+      <geometry>
+        <box size="0.02 0.02 0.02"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.01"/>
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
     </inertial>
   </link>
 
@@ -105,22 +125,22 @@
   <joint name="front_left_wheel_joint" type="continuous">
     <parent link="base_link"/>
     <child link="front_left_wheel"/>
-    <origin xyz="0.15 0.15 0" rpy="0 1.57 0"/>
-    <axis xyz="0 0 1"/>
+    <origin xyz="0.15 0.2 -0.15" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
   </joint>
 
   <joint name="front_right_wheel_joint" type="continuous">
     <parent link="base_link"/>
     <child link="front_right_wheel"/>
-    <origin xyz="0.15 -0.15 0" rpy="0 1.57 0"/>
-    <axis xyz="0 0 1"/>
+    <origin xyz="0.15 -0.2 -0.15" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
   </joint>
 
   <joint name="rear_wheel_joint" type="continuous">
     <parent link="base_link"/>
     <child link="rear_wheel"/>
-    <origin xyz="-0.15 0 0" rpy="0 1.57 0"/>
-    <axis xyz="0 0 1"/>
+    <origin xyz="-0.15 0 -0.15" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
   </joint>
 
   <joint name="camera_joint" type="fixed">
@@ -129,25 +149,33 @@
     <origin xyz="0.2 0 0.1" rpy="0 0 0"/>
   </joint>
 
+  <joint name="laser_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="laser_link"/>
+    <origin xyz="0.2 0 0.15" rpy="0 0 0"/>
+  </joint>
+
   <!-- Gazebo Plugins -->
   <gazebo>
     <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
       <rosDebugLevel>Debug</rosDebugLevel>
       <publishOdomTF>true</publishOdomTF>
-      <robotNamespace>/</robotNamespace>
-      <publishWheelTF>true</publishWheelTF>
-      <publishTf>true</publishTf>
-      <odometryFrame>odom</odometryFrame>
-      <odometryRate>1.0</odometryRate>
-      <robotBaseFrame>base_link</robotBaseFrame>
-      
+      <alwaysOn>true</alwaysOn>
+      <updateRate>100</updateRate>
       <leftJoint>front_left_wheel_joint</leftJoint>
       <rightJoint>front_right_wheel_joint</rightJoint>
-      <wheelSeparation>0.3</wheelSeparation>
+      <wheelSeparation>0.4</wheelSeparation>
       <wheelDiameter>0.2</wheelDiameter>
-      <torque>20</torque>
+      <torque>200</torque>
+      <wheelTorque>200</wheelTorque>
       <commandTopic>cmd_vel</commandTopic>
       <odometryTopic>odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <robotBaseFrame>base_link</robotBaseFrame>
+      <publishWheelTF>true</publishWheelTF>
+      <publishTf>true</publishTf>
+      <publishWheelJointState>true</publishWheelJointState>
+      <legacyMode>false</legacyMode>
     </plugin>
   </gazebo>
 
@@ -184,19 +212,44 @@
     </sensor>
   </gazebo>
 
-  <!-- Proximity Sensor (Laser) -->
-  <gazebo>
-    <plugin name="gazebo_ros_laser_controller" filename="libgazebo_ros_laser.so">
-      <rosDebugLevel>Debug</rosDebugLevel>
-      <robotNamespace>/</robotNamespace>
-      <topicName>scan</topicName>
-      <frameName>base_link</frameName>
-      <minAngle>-1.57</minAngle>
-      <maxAngle>1.57</maxAngle>
-      <minRange>0.1</minRange>
-      <maxRange>10.0</maxRange>
-      <updateRate>40</updateRate>
-    </plugin>
+  <!-- Proximity Sensor (Laser/Ray) - attached to laser_link for physics -->
+  <gazebo reference="laser_link">
+    <sensor type="ray" name="proximity_laser">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>true</visualize>
+      <update_rate>40</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>360</samples>
+            <resolution>1</resolution>
+            <min_angle>-1.5708</min_angle>
+            <max_angle>1.5708</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.1</min>
+          <max>10.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <!-- Use libgazebo_ros_ray_sensor.so (Noetic) or libgazebo_ros_laser.so (Melodic) -->
+      <plugin name="gazebo_ros_laser_controller" filename="libgazebo_ros_ray_sensor.so">
+        <rosDebugLevel>Debug</rosDebugLevel>
+        <robotNamespace>/</robotNamespace>
+        <topicName>scan</topicName>
+        <frameName>laser_link</frameName>
+        <minAngle>-1.5708</minAngle>
+        <maxAngle>1.5708</maxAngle>
+        <minRange>0.1</minRange>
+        <maxRange>10.0</maxRange>
+      </plugin>
+    </sensor>
   </gazebo>
 
   <!-- Gyroscope -->
@@ -209,6 +262,24 @@
       <gaussianNoise>0.01</gaussianNoise>
       <updateRate>100</updateRate>
     </plugin>
+  </gazebo>
+
+  <!-- Friction settings -->
+  <gazebo reference="front_left_wheel">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <kp>100000.0</kp>
+    <kd>10.0</kd>
+  </gazebo>
+  <gazebo reference="front_right_wheel">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <kp>100000.0</kp>
+    <kd>10.0</kd>
+  </gazebo>
+  <gazebo reference="rear_wheel">
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
   </gazebo>
 
 </robot>

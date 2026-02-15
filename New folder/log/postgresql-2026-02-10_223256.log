@@ -1,0 +1,5 @@
+2026-02-10 22:32:57 PST LOG:  database system was interrupted; last known up at 2026-02-08 03:17:38 PST
+2026-02-10 22:33:07 PST LOG:  syncing data directory (fsync), elapsed time: 10.04 s, current path: ./base/4/2616
+2026-02-10 22:33:17 PST LOG:  syncing data directory (fsync), elapsed time: 20.00 s, current path: ./base/5/2837
+2026-02-10 22:33:23 PST LOG:  database system was not properly shut down; automatic recovery in progress
+2026-02-10 22:33:23 PST LOG:  redo starts at 0/183AE18
