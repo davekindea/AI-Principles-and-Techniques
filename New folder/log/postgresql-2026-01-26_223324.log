@@ -1,9 +1,0 @@
-2026-01-26 22:33:25 PST LOG:  database system was interrupted; last known up at 2026-01-24 07:22:58 PST
-2026-01-26 22:33:35 PST LOG:  syncing data directory (fsync), elapsed time: 10.06 s, current path: ./base/4/2607
-2026-01-26 22:33:45 PST LOG:  syncing data directory (fsync), elapsed time: 20.01 s, current path: ./base/5/2696
-2026-01-26 22:33:52 PST LOG:  database system was not properly shut down; automatic recovery in progress
-2026-01-26 22:33:52 PST LOG:  redo starts at 0/183A738
-2026-01-26 22:33:52 PST LOG:  invalid record length at 0/183A770: expected at least 24, got 0
-2026-01-26 22:33:52 PST LOG:  redo done at 0/183A738 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.03 s
-2026-01-26 22:33:52 PST LOG:  checkpoint starting: end-of-recovery immediate wait
-2026-01-26 22:33:52 PST LOG:  checkpoint complete: wrote 0 buffers (0.0%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.004 s, sync=0.049 s, total=0.263 s; sync files=2, longest=0.026 s, average=0.025 s; distance=0 kB, estimate=0 kB; lsn=0/183A770, redo lsn=0/183A770
