@@ -2,3 +2,9 @@
 2026-02-15 10:39:54 PST LOG:  syncing data directory (fsync), elapsed time: 10.05 s, current path: ./base/4/2617_vm
 2026-02-15 10:40:04 PST LOG:  syncing data directory (fsync), elapsed time: 20.01 s, current path: ./base/5/2840_vm
 2026-02-15 10:40:20 PST LOG:  syncing data directory (fsync), elapsed time: 36.24 s, current path: ./global/pg_control
+2026-02-15 10:40:21 PST LOG:  database system was not properly shut down; automatic recovery in progress
+2026-02-15 10:40:21 PST LOG:  redo starts at 0/183B238
+2026-02-15 10:40:21 PST LOG:  invalid record length at 0/183B270: expected at least 24, got 0
+2026-02-15 10:40:21 PST LOG:  redo done at 0/183B238 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.03 s
+2026-02-15 10:40:21 PST LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-02-15 10:40:22 PST LOG:  checkpoint complete: wrote 0 buffers (0.0%), wrote 3 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.003 s, sync=0.047 s, total=0.255 s; sync files=2, longest=0.025 s, average=0.024 s; distance=0 kB, estimate=0 kB; lsn=0/183B270, redo lsn=0/183B270
