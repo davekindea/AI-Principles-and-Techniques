@@ -20,17 +20,12 @@ if errorlevel 1 (
 
 echo.
 echo Starting container. You will get a bash shell inside.
-echo Then run these commands one by one:
-echo.
-echo   cp -r /project/ros_package /catkin_ws/src/traveling_ethiopia_robot
-echo   mkdir -p /catkin_ws/src/traveling_ethiopia_robot/worlds /catkin_ws/src/traveling_ethiopia_robot/urdf
-echo   cp /project/world/traveling_ethiopia.world /catkin_ws/src/traveling_ethiopia_robot/worlds/
-echo   cp /project/robot_description/three_wheel_robot.urdf /catkin_ws/src/traveling_ethiopia_robot/urdf/
-echo   sed -i "s|\${CMAKE_CURRENT_SOURCE_DIR}/../world/traveling_ethiopia.world|\${CMAKE_CURRENT_SOURCE_DIR}/worlds/traveling_ethiopia.world|g" /catkin_ws/src/traveling_ethiopia_robot/CMakeLists.txt
-echo   sed -i "s|\${CMAKE_CURRENT_SOURCE_DIR}/../robot_description/three_wheel_robot.urdf|\${CMAKE_CURRENT_SOURCE_DIR}/urdf/three_wheel_robot.urdf|g" /catkin_ws/src/traveling_ethiopia_robot/CMakeLists.txt
-echo   cd /catkin_ws ^&^& source /opt/ros/noetic/setup.bash ^&^& catkin_make ^&^& source devel/setup.bash
+echo Then run:
+echo   bash /project/docker/build_and_launch.sh
 echo   roslaunch traveling_ethiopia_robot gazebo_world.launch
+echo.
+echo For best experience (persisted build), use WSL and run: bash run_here.sh
 echo.
 pause
 
-docker run -it --rm --network host -e DISPLAY=host.docker.internal:0 -e QT_X11_NO_MITSHM=1 -v "%CD%\..":/project:ro traveling_ethiopia_robot:noetic bash
+docker run -it --rm --network host -e DISPLAY=host.docker.internal:0 -e QT_X11_NO_MITSHM=1 -v "%CD%\..":/project:ro -v traveling_ethiopia_ws:/catkin_ws traveling_ethiopia_robot:noetic bash

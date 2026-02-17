@@ -75,7 +75,7 @@ class PathPlannerNode(Node):
         self.declare_parameter("initial_state", "Addis Ababa")
         self.declare_parameter("goal_state", "Moyale")
         self.declare_parameter("strategy", "bfs")
-        self.declare_parameter("execute_path", False)
+        self.declare_parameter("execute_path", True)
 
         self.planner = UninformedSearchPathPlanner()
         self.path_pub = self.create_publisher(String, "planned_path", 10)
@@ -84,15 +84,20 @@ class PathPlannerNode(Node):
         self.odom_sub = self.create_subscription(Odometry, "odom", self._odom_cb, qos)
 
         self.current_position = [0.0, 0.0]
+        self.current_yaw = 0.0
         self.current_path = None
         self.path_index = 0
-        self.linear_speed = 0.25
-        self.angular_speed = 0.4
-        self.dist_thresh = 0.8
+        self.linear_speed = 0.35
+        self.angular_speed = 0.6
+        self.dist_thresh = 1.0
 
     def _odom_cb(self, msg):
         self.current_position[0] = msg.pose.pose.position.x
         self.current_position[1] = msg.pose.pose.position.y
+        q = msg.pose.pose.orientation
+        siny_cosp = 2.0 * (q.w * q.z + q.x * q.y)
+        cosy_cosp = 1.0 - 2.0 * (q.y * q.y + q.z * q.z)
+        self.current_yaw = math.atan2(siny_cosp, cosy_cosp)
 
     def run(self):
         initial = self.get_parameter("initial_state").value
@@ -139,12 +144,18 @@ class PathPlannerNode(Node):
         dy = wp[1] - self.current_position[1]
         dist = math.sqrt(dx * dx + dy * dy)
         if dist < self.dist_thresh:
+            self.get_logger().info("Reached waypoint %d/%d" % (self.path_index + 1, len(self.current_path)))
             self.path_index += 1
             return
-        angle = math.atan2(dy, dx)
+        target_angle = math.atan2(dy, dx)
+        angle_error = target_angle - self.current_yaw
+        while angle_error > math.pi:
+            angle_error -= 2.0 * math.pi
+        while angle_error < -math.pi:
+            angle_error += 2.0 * math.pi
         twist = Twist()
-        if abs(angle) > 0.15:
-            twist.angular.z = self.angular_speed if angle > 0 else -self.angular_speed
+        if abs(angle_error) > 0.2:
+            twist.angular.z = self.angular_speed if angle_error > 0 else -self.angular_speed
         else:
             twist.linear.x = self.linear_speed
         self.cmd_vel_pub.publish(twist)

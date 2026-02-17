@@ -2,95 +2,18 @@
 Question 4: MiniMax Search Algorithm
 Assume an adversary joins the Traveling Ethiopia Search Problem.
 The goal of the agent would be to reach a state where it gains
-good quality of Coffee. Write a class that shows how MiniMax
-search algorithm directs an agent to the best achievable destination.
+good quality of Coffee. Uses shared MiniMax algorithm with alpha-beta pruning.
 """
 
-class MiniMaxSearch:
-    """Implements MiniMax algorithm for adversarial search"""
-    
-    def __init__(self, graph, utility_func, max_depth=5):
-        """
-        Initialize MiniMax search
-        
-        Args:
-            graph: Dictionary representing the game graph {node: [neighbors]}
-            utility_func: Function that takes (node, is_max_player) and returns utility
-            max_depth: Maximum depth to search
-        """
-        self.graph = graph
-        self.utility = utility_func
-        self.max_depth = max_depth
-    
-    def minimax(self, node, depth, is_maximizing_player, alpha=float('-inf'), beta=float('inf')):
-        """
-        MiniMax algorithm with alpha-beta pruning
-        
-        Args:
-            node: Current node
-            depth: Current depth
-            is_maximizing_player: True if maximizing player (agent), False if minimizing (adversary)
-            alpha: Best value for maximizing player
-            beta: Best value for minimizing player
-            
-        Returns:
-            tuple: (best_value, best_path)
-        """
-        # Terminal conditions
-        if depth == 0 or node not in self.graph or len(self.graph[node]) == 0:
-            utility = self.utility(node, is_maximizing_player)
-            return utility, [node]
-        
-        neighbors = self.graph[node]
-        
-        if is_maximizing_player:
-            # Agent's turn: maximize utility
-            max_value = float('-inf')
-            best_path = [node]
-            
-            for neighbor in neighbors:
-                value, path = self.minimax(neighbor, depth - 1, False, alpha, beta)
-                
-                if value > max_value:
-                    max_value = value
-                    best_path = [node] + path
-                
-                alpha = max(alpha, value)
-                if beta <= alpha:
-                    break  # Alpha-beta pruning
-            
-            return max_value, best_path
-        
-        else:
-            # Adversary's turn: minimize utility
-            min_value = float('inf')
-            best_path = [node]
-            
-            for neighbor in neighbors:
-                value, path = self.minimax(neighbor, depth - 1, True, alpha, beta)
-                
-                if value < min_value:
-                    min_value = value
-                    best_path = [node] + path
-                
-                beta = min(beta, value)
-                if beta <= alpha:
-                    break  # Alpha-beta pruning
-            
-            return min_value, best_path
-    
-    def search(self, initial_state):
-        """
-        Find the best path for the agent using MiniMax
-        
-        Args:
-            initial_state: Starting node
-            
-        Returns:
-            tuple: (best_value, best_path)
-        """
-        value, path = self.minimax(initial_state, self.max_depth, True)
-        return value, path
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from shared.search_algorithms import MiniMaxSearch as SharedMiniMax
+
+
+class MiniMaxSearch(SharedMiniMax):
+    """MiniMax: uses shared MiniMax with alpha-beta pruning and coffee utility."""
+    pass
 
 
 # Utility function: Coffee quality at different locations
@@ -121,41 +44,47 @@ def create_coffee_utility_function():
     
     def utility(node, is_maximizing_player):
         """
-        Calculate utility for a node
-        
-        Args:
-            node: Current node
-            is_maximizing_player: True if agent, False if adversary
-            
-        Returns:
-            int: Utility value
+        Utility at a node (e.g. leaf). Same payoff for both players:
+        agent maximizes it, adversary minimizes it.
         """
-        # Get utility value for terminal state, or use default
         base_utility = utility_values.get(node, default_utility)
-        
-        if is_maximizing_player:
-            # Agent wants high utility (coffee quality)
-            return base_utility
-        else:
-            # Adversary wants to minimize agent's utility
-            return -base_utility
-    
+        return base_utility
+
     return utility
 
 
-# Create game graph (simplified version - adjust based on Figure 4)
+# Figure 4: Adversarial Traveling Ethiopia (from "Figure 4 Adversary Traveling Ethiopia.jpg")
+# Initial: Addis Ababa. Agent and adversary alternate moves. Terminal nodes have utility (coffee quality).
 def create_adversarial_graph():
     """
-    Create the adversarial game graph
-    This represents possible moves for both agent and adversary
+    Create the adversarial game graph from Figure 4.
+    Structure: Addis Ababa -> Ambo/Adama -> ... -> terminal nodes (Shambu, Fincha, etc.).
     """
-    import sys
-    import os
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    from question1.graph_converter import create_figure1_graph
-    
-    converter = create_figure1_graph()
-    return converter.get_graph()
+    return {
+        "Addis Ababa": ["Ambo", "Adama"],
+        "Ambo": ["Gedo", "Nekemte", "Buta Jirra"],
+        "Adama": ["Diredawa", "Mojo"],
+        "Gedo": ["Shambu", "Fincha"],
+        "Nekemte": ["Gimbi", "Limu"],
+        "Diredawa": ["Harar", "Chiro"],
+        "Mojo": ["Dilla", "Kaffa"],
+        "Buta Jirra": ["Worabe", "Wolkite"],
+        "Worabe": ["Hossana", "Durame"],
+        "Wolkite": ["Bench Naji", "Tepi"],
+        # Terminal nodes (no successors)
+        "Shambu": [],
+        "Fincha": [],
+        "Gimbi": [],
+        "Limu": [],
+        "Hossana": [],
+        "Durame": [],
+        "Bench Naji": [],
+        "Tepi": [],
+        "Kaffa": [],
+        "Dilla": [],
+        "Chiro": [],
+        "Harar": [],
+    }
 
 
 if __name__ == "__main__":
@@ -165,7 +94,7 @@ if __name__ == "__main__":
     # Create utility function
     utility_func = create_coffee_utility_function()
     
-    # Initialize MiniMax Search
+    # Initialize MiniMax Search (depth 4: enough to reach any terminal in Figure 4)
     minimax = MiniMaxSearch(graph, utility_func, max_depth=4)
     
     # Question 4: Find best path for agent

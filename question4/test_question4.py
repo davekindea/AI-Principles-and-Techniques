@@ -21,7 +21,7 @@ def test_question4():
     # Create utility function
     utility_func = create_coffee_utility_function()
     
-    # Initialize MiniMax Search
+    # Initialize MiniMax Search (Figure 4 graph; depth 4 reaches all terminals)
     minimax = MiniMaxSearch(graph, utility_func, max_depth=4)
     
     print("\n4. Testing MiniMax Search (Addis Ababa as initial):")
@@ -30,13 +30,12 @@ def test_question4():
     best_value, best_path = minimax.search(initial)
     if best_path:
         print(f"   [OK] MiniMax found best path: {' -> '.join(best_path)}")
-        print(f"   Expected utility: {best_value}")
+        print(f"   Expected utility (guaranteed): {best_value}")
         print(f"   Final destination: {best_path[-1]}")
         
-        # Show coffee quality
         utility_func_instance = create_coffee_utility_function()
         final_quality = utility_func_instance(best_path[-1], True)
-        print(f"   Coffee quality at destination: {final_quality}/100")
+        print(f"   Coffee quality at destination: {final_quality} (scale 0-10)")
     else:
         print(f"   [FAIL] MiniMax: No path found")
     

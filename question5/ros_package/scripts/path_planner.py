@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Question 5.3: ROS-based class using uninformed search strategy.
+Question 5.3: ROS-based class using uninformed search strategy (BFS or DFS).
 Generates a path for the robot from any given initial state to the goal state
-in the Figure 5 state space (BFS or DFS).
+in the Figure 5 state space. Uses shared BFS/DFS when the repo root is on path.
 """
 
 from collections import deque
@@ -10,10 +10,13 @@ import math
 import os
 import sys
 
-# Allow importing figure5_graph when run as script from scripts/
 _script_dir = os.path.dirname(os.path.abspath(__file__))
 if _script_dir not in sys.path:
     sys.path.insert(0, _script_dir)
+# Repo root (ai pre) for shared algorithms
+_repo_root = os.path.abspath(os.path.join(_script_dir, "..", "..", ".."))
+if _repo_root not in sys.path:
+    sys.path.insert(0, _repo_root)
 
 try:
     from figure5_graph import get_graph_undirected, STATE_COORDINATES
@@ -21,6 +24,12 @@ except ImportError:
     STATE_COORDINATES = {}
     def get_graph_undirected():
         return {}
+
+try:
+    from shared.search_algorithms import breadth_first_search as _bfs_shared, depth_first_search as _dfs_shared
+    _USE_SHARED = True
+except ImportError:
+    _USE_SHARED = False
 
 
 class UninformedSearchPathPlanner:
@@ -41,12 +50,9 @@ class UninformedSearchPathPlanner:
         self.state_coordinates = state_coordinates if state_coordinates is not None else STATE_COORDINATES
 
     def breadth_first_search(self, initial_state, goal_state):
-        """
-        Breadth-First Search: returns shortest path in number of steps.
-
-        Returns:
-            tuple: (path, nodes_explored) or (None, nodes_explored).
-        """
+        """BFS: uses shared algorithm when available. Returns (path, nodes_explored)."""
+        if _USE_SHARED:
+            return _bfs_shared(self.graph, initial_state, goal_state)
         if initial_state == goal_state:
             return [initial_state], [initial_state]
         queue = deque([(initial_state, [initial_state])])
@@ -64,12 +70,9 @@ class UninformedSearchPathPlanner:
         return None, nodes_explored
 
     def depth_first_search(self, initial_state, goal_state):
-        """
-        Depth-First Search: returns a path (not necessarily shortest).
-
-        Returns:
-            tuple: (path, nodes_explored) or (None, nodes_explored).
-        """
+        """DFS: uses shared algorithm when available. Returns (path, nodes_explored)."""
+        if _USE_SHARED:
+            return _dfs_shared(self.graph, initial_state, goal_state)
         if initial_state == goal_state:
             return [initial_state], [initial_state]
         stack = [(initial_state, [initial_state])]
@@ -139,35 +142,35 @@ def main_ros():
         pub = rospy.Publisher("/planned_path", String, queue_size=1, latch=True)
         pub.publish(path_str)
 
-        # Optional: execute path with cmd_vel (simplified)
+        # Drive robot along the path using cmd_vel
         cmd_pub = rospy.Publisher("/cmd_vel", Twist, queue_size=1)
-        rate = rospy.Rate(10)
+        rate = rospy.Rate(15)
         waypoints = planner.path_as_waypoints(path)
         current_pos = [0.0, 0.0]
         current_yaw = 0.0
         wp_index = 0
-        dist_thresh = 0.8
-        linear_speed = 0.25
-        angular_speed = 0.6
+        dist_thresh = 1.0
+        linear_speed = 0.4
+        angular_speed = 0.8
+        odom_received = [False]
 
         def odom_cb(msg):
             nonlocal current_pos, current_yaw
             current_pos[0] = msg.pose.pose.position.x
             current_pos[1] = msg.pose.pose.position.y
-            
-            # Quaternion to yaw
             q = msg.pose.pose.orientation
             siny_cosp = 2 * (q.w * q.z + q.x * q.y)
             cosy_cosp = 1 - 2 * (q.y * q.y + q.z * q.z)
             current_yaw = math.atan2(siny_cosp, cosy_cosp)
+            odom_received[0] = True
 
         rospy.Subscriber("/odom", Odometry, odom_cb)
-        rospy.loginfo("Waiting for odom...")
-        for _ in range(50):
-            if current_pos != [0.0, 0.0]:
+        rospy.loginfo("Robot will follow the path. Waiting for odometry...")
+        for _ in range(100):
+            if odom_received[0]:
                 break
             rospy.sleep(0.1)
-        rospy.loginfo("Starting path execution from %s, yaw %.2f", current_pos, current_yaw)
+        rospy.loginfo("Starting movement along path: %s -> ... -> %s", path[0], path[-1])
 
         try:
             while not rospy.is_shutdown() and wp_index < len(waypoints):
@@ -181,11 +184,11 @@ def main_ros():
                 dist = math.sqrt(dx * dx + dy * dy)
                 
                 if dist < dist_thresh:
-                    rospy.loginfo("Reached waypoint %d: %s", wp_index, path[wp_index])
+                    rospy.loginfo("Reached waypoint %d/%d: %s", wp_index + 1, len(path), path[wp_index])
                     wp_index += 1
                     continue
-                
-                # Target angle in world frame
+
+                # Target angle in world frame (point toward waypoint)
                 target_angle = math.atan2(dy, dx)
                 # Angle error relative to robot orientation
                 angle_error = target_angle - current_yaw
@@ -211,6 +214,7 @@ def main_ros():
 
         twist = Twist()
         cmd_pub.publish(twist)
+        rospy.loginfo("Robot stopped. Path complete.")
     else:
         rospy.logwarn("No path found from %s to %s", initial, goal)
 
@@ -243,5 +247,11 @@ if __name__ == "__main__":
             print(f"Path ({args.strategy.upper()}): {' -> '.join(path)}")
             print(f"Path length: {len(path) - 1} edges")
             print(f"Nodes explored: {len(explored)}")
+            waypoints = planner.path_as_waypoints(path)
+            if waypoints and any(w for w in waypoints):
+                print("Waypoints (x, y) in meters (Figure 5 Cartesian):")
+                for i, (name, wp) in enumerate(zip(path, waypoints)):
+                    if wp:
+                        print(f"  {i+1}. {name}: ({wp[0]:.1f}, {wp[1]:.1f})")
         else:
             print(f"No path found from {args.initial} to {args.goal}")

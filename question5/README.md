@@ -83,7 +83,7 @@ python path_planner.py
 
    (Package name is `traveling_ethiopia_robot`; the launch file lives in `question5/ros_package/launch` and is installed into the package share.)
 
-4. In another terminal, run the path planner (default: Addis Ababa → Moyale, BFS):
+4. In another terminal, run the path planner (default: Addis Ababa → Moyale, BFS). **The robot will automatically move along the planned path** (publishing `/cmd_vel`):
 
    ```bash
    rosrun traveling_ethiopia_robot path_planner.py

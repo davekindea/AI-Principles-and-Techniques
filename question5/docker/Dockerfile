@@ -21,6 +21,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN mkdir -p /catkin_ws/src
 WORKDIR /catkin_ws
 
+# Copy helper script (run this inside container when /project is mounted)
+COPY build_and_launch.sh /catkin_ws/build_and_launch.sh
+RUN chmod +x /catkin_ws/build_and_launch.sh
+
 # Source ROS in shell
 RUN echo "source /opt/ros/noetic/setup.bash" >> /etc/bash.bashrc
 

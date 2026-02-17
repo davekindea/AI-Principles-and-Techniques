@@ -1,6 +1,8 @@
 # Run Question 5 with Docker (Ubuntu 20.04 + ROS Noetic)
 
-You keep **Ubuntu 24** as your host. Inside Docker you run **Ubuntu 20.04 + ROS Noetic** and use `roslaunch` and Gazebo as usual.
+You keep **Ubuntu 24** (or WSL) as your host. Inside Docker you run **Ubuntu 20.04 + ROS Noetic** and use `roslaunch` and Gazebo as usual.
+
+**How to run (WSL/Linux):** See **STEP_BY_STEP.md** for the full flow. In short: build image → run container with project + workspace volume → inside run `bash /project/docker/build_and_launch.sh` → `roslaunch traveling_ethiopia_robot gazebo_world.launch` → in a second terminal run another container and `rosrun traveling_ethiopia_robot path_planner.py`.
 
 ---
 
@@ -166,9 +168,9 @@ No need to copy or build again.
 |------|--------|
 | 1. X11 | `xhost +local:docker` |
 | 2. Build image | `cd question5/docker && docker build -t traveling_ethiopia_robot:noetic .` |
-| 3. Run container | `docker run -it --rm --network host -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v "$(pwd)/..":/project:ro traveling_ethiopia_robot:noetic bash` |
-| 4. Inside: build | Copy package, then `catkin_make` and `source devel/setup.bash` |
+| 3. Run container | `docker run -it --rm --network host -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v "/path/to/question5":/project:ro -v traveling_ethiopia_ws:/catkin_ws traveling_ethiopia_robot:noetic bash` |
+| 4. Inside: build | `bash /project/docker/build_and_launch.sh` |
 | 5. Inside: Gazebo | `roslaunch traveling_ethiopia_robot gazebo_world.launch` |
-| 6. Path planner | In same container: `rosrun traveling_ethiopia_robot path_planner.py` |
+| 6. Path planner | Second terminal: new container with `-v traveling_ethiopia_ws:/catkin_ws`, then `source devel/setup.bash` and `rosrun traveling_ethiopia_robot path_planner.py` |
 
-Adjust the path in `-v` if your project is not under the current directory.
+For a full walkthrough, see **STEP_BY_STEP.md**.
